@@ -17,7 +17,7 @@
 
 截至目前，本文中代码的执行用时平均排名为：100%；内存消耗平均排名为：55.3%。
 
-你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C-with-main/)中浏览以下内容，会有更好的阅读体验。
+你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
 ​                           
 
