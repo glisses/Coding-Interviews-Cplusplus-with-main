@@ -1,5 +1,5 @@
-# Coding-Interviews-C--with-main
-本文严格按照[LeetCode上《剑指offer》学习计划](https://leetcode-cn.com/study-plan/lcof/?progress=wp5ibz5)的顺序撰写。
+# Coding-Interviews-C++-with-main
+本文严格按照[LeetCode上《剑指offer》学习计划](https://leetcode-cn.com/study-plan/lcof/?progress=wp5ibz5)的顺序撰写。代码皆为C++。
 
 **动机**：LeetCode题解没有主程序，对我在本地测试造成了麻烦。想提供一份包含测试的完整程序，供大家使用。
 
