@@ -16,7 +16,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败98.40%的用户，内存消耗平均击败57.15%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败98.86%的用户，内存消耗平均击败57.55%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -436,4 +436,128 @@ int main()
 通过测试用例：18 / 18
 
 
+
+​                           
+
+## Day 3
+
+### [剑指 Offer 05. 替换空格](https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/)
+
+#### 【解题思路】
+
+没啥好说的。不过这个代码写法来自LeetCode用户[Charge yourself](https://leetcode-cn.com/u/lcuserlixj/)。学习了。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    string replaceSpace(string s) {
+        string ret = "";
+        for (auto c:s)
+            if (c==' ')
+                ret.push_back('%'), ret.push_back('2'), ret.push_back('0');
+            else
+                ret.push_back(c);
+        return ret;
+    }
+};
+
+int main()
+{
+    Solution solution = Solution();
+    string s = "We are happy.";
+    cout<<solution.replaceSpace(s)<<endl;
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+We%20are%20happy.
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：5.9 MB, 在所有 C++ 提交中击败了95.39%的用户
+
+通过测试用例：27 / 27
+
+​                                                 	
+
+### [剑指 Offer 58 - II. 左旋转字符串](https://leetcode-cn.com/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/)
+
+#### 【解题思路】
+
+略 
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        return s.substr(n)+s.substr(0,n);
+    }
+};
+
+int main()
+{
+    Solution solution = Solution();
+    string s = "abcdefg";
+    int k = 2;
+    cout<<solution.reverseLeftWords(s,k)<<endl;
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+cdefgab
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：7.7 MB, 在所有 C++ 提交中击败了21.72%的用户
+
+通过测试用例：34 / 34
+
+#### 【备注】
+
+看到一种更棒的写法：
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：7 MB, 在所有 C++ 提交中击败了88.84%的用户
+
+通过测试用例：34 / 34
+
+``` c++
+class Solution {
+public:
+    string reverseLeftWords(string s, int n) {
+        n = n % s.size();
+        reverse(s.begin(), s.begin() + n);
+        reverse(s.begin() + n, s.end());
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};
+```
+
+
+
+​                          
 
