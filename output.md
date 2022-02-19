@@ -43,49 +43,49 @@
 using namespace std;
 
 class CQueue {
-	stack<int> stack1, stack2;
+    stack<int> stack1, stack2;
 public:
     CQueue() {
-		while (!stack1.empty())
-			stack1.pop();
-		while (!stack2.empty())
-			stack2.pop();
+        while (!stack1.empty())
+            stack1.pop();
+        while (!stack2.empty())
+            stack2.pop();
     }
     
     void appendTail(int value) {
-		stack1.push(value);
+        stack1.push(value);
     }
     
     int deleteHead() {
-    	if (stack1.empty() && stack2.empty())
-    		return -1;
+        if (stack1.empty() && stack2.empty())
+            return -1;
     
-		if (!stack2.empty())
-		{
-			int ret = stack2.top();
-			stack2.pop();
-			return ret;
-		}
-		
-		while(!stack1.empty())
-		{
-			stack2.push(stack1.top());
-			stack1.pop();
-		}
-		int ret = stack2.top();
-		stack2.pop();
-		return ret;
+        if (!stack2.empty())
+        {
+            int ret = stack2.top();
+            stack2.pop();
+            return ret;
+        }
+        
+        while(!stack1.empty())
+        {
+            stack2.push(stack1.top());
+            stack1.pop();
+        }
+        int ret = stack2.top();
+        stack2.pop();
+        return ret;
     }
 };
 int main()
 {
-	CQueue* obj = new CQueue();
-	cout<<(obj->deleteHead())<<endl;
-	obj->appendTail(5);
-	obj->appendTail(2);
-	cout<<obj->deleteHead()<<endl;
-	cout<<obj->deleteHead()<<endl;
-	return 0;
+    CQueue* obj = new CQueue();
+    cout<<(obj->deleteHead())<<endl;
+    obj->appendTail(5);
+    obj->appendTail(2);
+    cout<<obj->deleteHead()<<endl;
+    cout<<obj->deleteHead()<<endl;
+    return 0;
 }
 ```
 
@@ -124,44 +124,44 @@ int main()
 using namespace std;
 
 class MinStack {
-	stack <int> stack1, stack2;
+    stack <int> stack1, stack2;
 public:
     /** initialize your data structure here. */
     MinStack() {
-		while (!stack1.empty()) stack1.pop();
-		while (!stack2.empty()) stack2.pop();
+        while (!stack1.empty()) stack1.pop();
+        while (!stack2.empty()) stack2.pop();
     }
     
     void push(int x) {
-		stack1.push(x);
-		if (stack2.empty() or x<=stack2.top())  stack2.push(x);
+        stack1.push(x);
+        if (stack2.empty() or x<=stack2.top())  stack2.push(x);
     }
     
     void pop() {
-    	if (stack2.top()==stack1.top()) stack2.pop();
-		stack1.pop();
+        if (stack2.top()==stack1.top()) stack2.pop();
+        stack1.pop();
     }
     
     int top() {
-		return stack1.top();
+        return stack1.top();
     }
     
     int min() {
-		return stack2.top();
+        return stack2.top();
     }
 };
 
 int main()
 {
-	MinStack minStack = MinStack();
-	minStack.push(0);
-	minStack.push(1);
-	minStack.push(0);
-	cout<<minStack.min()<<endl;
-	minStack.pop();
-	cout<<minStack.min()<<endl;
+    MinStack minStack = MinStack();
+    minStack.push(0);
+    minStack.push(1);
+    minStack.push(0);
+    cout<<minStack.min()<<endl;
+    minStack.pop();
+    cout<<minStack.min()<<endl;
 
-	return 0;
+    return 0;
 }
 ```
 
@@ -209,27 +209,27 @@ struct ListNode {
 class Solution {
 public:
     vector<int> reversePrint(ListNode* head) {
-		if (!head) return {};
-		vector <int> a = reversePrint(head->next);
-		a.push_back(head->val);
-		return a;
+        if (!head) return {};
+        vector <int> a = reversePrint(head->next);
+        a.push_back(head->val);
+        return a;
     }
 };
 
 int main()
 {
-	ListNode* head = new ListNode(1);
-	ListNode* node2 = new ListNode(3);
-	ListNode* node3 = new ListNode(2);
-	head->next = node2;
-	node2->next = node3;
-	Solution solution = Solution();
-	
-	vector <int> ans = solution.reversePrint(head);
-	// requires C++ 11
-	for (auto i = ans.begin(); i != ans.end(); i++) cout << *i << ' ';
+    ListNode* head = new ListNode(1);
+    ListNode* node2 = new ListNode(3);
+    ListNode* node3 = new ListNode(2);
+    head->next = node2;
+    node2->next = node3;
+    Solution solution = Solution();
+    
+    vector <int> ans = solution.reversePrint(head);
+    // requires C++ 11
+    for (auto i = ans.begin(); i != ans.end(); i++) cout << *i << ' ';
 
-	return 0;
+    return 0;
 }
 ```
 
