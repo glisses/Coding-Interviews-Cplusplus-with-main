@@ -16,7 +16,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败98.59%的用户，内存消耗平均击败56.85%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败98.40%的用户，内存消耗平均击败57.15%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -320,7 +320,120 @@ int main()
 
 通过测试用例：27 / 27
 
+​                          
 
+### [剑指 Offer 35. 复杂链表的复制](https://leetcode-cn.com/problems/fu-za-lian-biao-de-fu-zhi-lcof/)
+
+#### 【解题思路】
+
+参考了leetcode官方题解的第二种解法。
+
+遍历链表三次：
+
+- 第一遍，对每个节点产生复制节点
+- 第二遍，处理复制节点的random指针
+- 第三遍，分开原链表和复制链表
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std; 
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (!head) return NULL;
+        Node* curr = head;
+        Node* copy = NULL;
+        
+        //第一遍，产生复制节点S'
+        while (curr)
+        {
+            copy = new Node(curr->val);
+            copy->next = curr->next;
+            curr->next = copy;
+            curr = copy->next;        
+        }
+        copy = head->next;
+        
+        //第二遍，处理S'->random 
+        curr = head;
+        while (curr)
+        {
+            if (curr->random)
+                curr->next->random = curr->random->next; // amazing
+            curr = curr->next->next;
+        }
+        
+        //第三遍，分开原链表head和复制链表copy 
+        curr = head;
+        while (curr)
+        {
+            auto x = curr->next->next;
+            if (x) curr->next->next = x->next;
+            curr->next = x;
+            curr = x;
+        }
+        
+        return copy;
+    }
+};
+
+int main()
+{
+    Node* head = new Node(7);
+    Node* node1 = new Node(13); head->next = node1;
+    Node* node2 = new Node(11); node1->next = node2;
+    Node* node3 = new Node(10); node2->next = node3;
+    Node* node4 = new Node(1);  node3->next = node4;
+    node1->random = head;
+    node2->random = node4;
+    node3->random = node2;
+    node4->random = head;
+    
+    Solution solution = Solution();
+    Node* ans = solution.copyRandomList(head);
+    for (auto i=ans; i; i=i->next) 
+    {
+        cout<<i->val<<" ";
+        if (i->random) cout<<i->random->val; else cout<<"NULL";
+        cout<<endl;
+    }
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+7 NULL
+13 7
+11 1
+10 11
+1 7
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了97.67%的用户
+
+内存消耗：11 MB, 在所有 C++ 提交中击败了58.37%的用户
+
+通过测试用例：18 / 18
 
 
 
