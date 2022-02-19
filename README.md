@@ -251,3 +251,76 @@ int main()
 
 通过测试用例：24 / 24
 
+​               
+
+#### [剑指 Offer 24. 反转链表](https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/)
+
+#### 【解题思路】
+
+用head和tail表示已经处理好了的链表部分的头指针和尾指针。
+
+每次将tail后的一个节点放到最前面。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+//Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        auto tail = head;
+        while (tail && tail->next)  //判断tail是为了防止输入是空链表 
+        {
+            auto swap = tail->next->next;
+            tail->next->next = head; 
+            head = tail->next;
+            tail->next = swap;
+        }
+        return head;
+    }
+};
+
+int main()
+{
+    ListNode* head = new ListNode(1);
+    ListNode* node2 = new ListNode(2); head->next = node2;
+    ListNode* node3 = new ListNode(3); node2->next = node3;
+    ListNode* node4 = new ListNode(4); node3->next = node4;
+    ListNode* node5 = new ListNode(5); node4->next = node5;
+
+    Solution solution = Solution();
+    ListNode* ans = solution.reverseList(head);
+    // requires C++ 11
+    for (auto i = ans; i; i=i->next) cout<<i->val<<"->";
+    cout<<"NULL\n";
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+5->4->3->2->1->NULL
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了94.34%的用户
+
+内存消耗：8.1 MB, 在所有 C++ 提交中击败了61.40%的用户
+
+通过测试用例：27 / 27
+
+
+
+
+
