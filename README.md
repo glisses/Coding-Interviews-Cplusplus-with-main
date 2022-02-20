@@ -16,7 +16,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败98.86%的用户，内存消耗平均击败57.55%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.55%的用户，内存消耗平均击败65.65%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -556,6 +556,209 @@ public:
     }
 };
 ```
+
+​                          
+
+## Day 4
+
+​                          
+
+### [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+
+#### 【解题思路】
+
+用一个数组判断是否访问过
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        vector<bool> vis(nums.size());
+        for (int i=0;i<vis.size();i++) vis[i]=false;
+        
+        for (auto x:nums)
+            if (!vis[x]) vis[x] = true;
+            else return x;
+        return -1;  // denotes no repeat nums
+    }
+};
+
+int main()
+{
+    vector <int> nums = {2, 3, 1, 0, 2, 5, 3};
+    Solution solution = Solution();
+    cout<< solution.findRepeatNumber(nums)<< endl;
+    return 0; 
+}
+```
+
+#### 【样例输出】
+
+``` c++
+2
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：20 ms, 在所有 C++ 提交中击败了99.25%的用户
+
+内存消耗：22.3 MB, 在所有 C++ 提交中击败了96.92%的用户
+
+通过测试用例：25 / 25
+
+#### 【备注】
+
+看到一种更棒的写法：
+
+时间复杂度O(n)，**空间复杂度O(1)**。
+
+思想是用下标进行控制，把nums[nums[i]]减掉n（即数组中数的上限）。如果某个nums[nums[i]]还没减掉n就是负数了，那就表示nums[i]重复了。
+
+``` c++
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        int n = nums.size();
+        for(int i = 0; i < n; i++){
+            int k = nums[i];
+            if(k < 0) k += n;
+            if(nums[k] < 0) return k;
+            nums[k] -= n;
+        }
+        
+        return -1;
+    }
+};
+```
+
+​                                                    
+
+### [剑指 Offer 53 - I. 在排序数组中查找数字 I](https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/)
+
+#### 【解题思路】
+
+因为是有序的数组，所以可以用二分查找。
+
+时间复杂度O(log n)，空间复杂度O(1)。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int l=0, r=nums.size()-1;
+        if (r<0) return 0;
+        
+        while (l<r)
+        {
+            int mid=(l+r)>>1;
+            if (nums[mid]<target) l=mid+1; else r=mid;
+        }
+        if (nums[l]!=target) return 0;
+        
+        r = nums.size()-1;
+        while (l<r)
+        {
+            int mid = (l+r)>>1;
+            if (nums[mid]>target) r=mid-1; else break;
+        }
+        while (nums[r]!=target && r>=l) r--;
+        
+        return r-l+1;
+    }
+};
+
+int main()
+{
+    vector <int> nums = {5,7,7,8,8,8,8,8,8,8,10};
+//    vector <int> nums = {};
+    int target = 8;
+    Solution solution = Solution();
+    cout<< solution.search(nums, target)<< endl;
+    return 0; 
+}
+```
+
+#### 【样例输出】
+
+``` c++
+7
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了91.69%的用户
+
+内存消耗：12.8 MB, 在所有 C++ 提交中击败了80.90%的用户
+
+通过测试用例：88 / 88
+
+​                                                    
+
+### [剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode-cn.com/problems/que-shi-de-shu-zi-lcof/)
+
+#### 【解题思路】
+
+二分。idx和nums[idx]有对应关系。
+
+注意边界情况：即缺失数字0或数字n-1的情况。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        if (nums[0]!=0) return 0;
+        int l=0, r=nums.size()-1;
+        if (nums[r]==r) return r+1;
+        
+        while (l<r)
+            if (nums[(l+r)>>1]==(l+r)>>1) l=((l+r)>>1)+1; else r=(l+r)>>1;
+        
+        return l; 
+    }
+};
+
+int main()
+{
+    vector <int> nums = {0,1,2,3,4,5,6,7,9};
+//    vector <int> nums = {0,1}; //一种很坑的情况 
+    Solution solution = Solution();
+    cout<< solution.missingNumber(nums)<< endl;
+    return 0; 
+}
+```
+
+#### 【样例输出】
+
+``` c++
+8
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：12 ms, 在所有 C++ 提交中击败了86.68%的用户
+
+内存消耗：16.6 MB, 在所有 C++ 提交中击败了91.05%的用户
+
+通过测试用例：122 / 122
+
+
+
+
 
 
 
