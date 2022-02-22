@@ -1,3 +1,14 @@
+<div align="center"><p>
+    <a href="https://github.com/glisses/Coding-Interviews-Cplusplus-with-main/pulse">
+      <img src="https://img.shields.io/github/last-commit/glisses/Coding-Interviews-Cplusplus-with-main?color=%4dc71f&label=Last%20Commit&logo=github&style=flat-square"/>
+    </a>
+    <a href="https://github.com/glisses/Coding-Interviews-Cplusplus-with-main/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/glisses/Coding-Interviews-Cplusplus-with-main?label=License&logo=GNU&style=flat-square"/>
+    </a>
+</p>
+</div>
+​                          
+
 # *Coding Interviews* C++ with main
 
 本文严格按照[LeetCode上《剑指offer》学习计划](https://leetcode-cn.com/study-plan/lcof/?progress=wp5ibz5)的顺序撰写。代码皆为C++。
@@ -16,7 +27,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.55%的用户，内存消耗平均击败65.65%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败96.49%的用户，内存消耗平均击败71.13%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -756,9 +767,215 @@ int main()
 
 通过测试用例：122 / 122
 
+​                          
+
+## Day 5
+
+​                          
+
+### [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+
+#### 【解题思路】
+
+从右上角开始找，每次要么左移一格，要么下移一格。时间复杂度O(n+m)。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) {
+        int row = matrix.size();
+        if (row<1) return false;
+        int column = matrix[0].size();
+        if (column<1) return false;
+        
+        int indexI = 0, indexJ = column-1;
+        while (indexI<row && indexJ>=0 && matrix[indexI][indexJ]!=target)
+        {
+            if (matrix[indexI][indexJ]>target) indexJ--; else
+                                               indexI++;
+        }
+        
+        return indexI<row && indexJ>=0 && matrix[indexI][indexJ]==target;
+    }
+};
+
+int main()
+{
+    Solution solution = Solution();
+    vector<vector<int>> matrix = 
+              {
+              {1,   4,  7, 11, 15},
+              {2,   5,  8, 12, 19},
+              {3,   6,  9, 16, 22},
+              {10, 13, 14, 17, 24},
+              {18, 21, 23, 26, 30}
+              };
+//                {{-5}
+//                };
+    int target = 20;        
+    
+    cout<<solution.findNumberIn2DArray(matrix, target)<<endl;
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+0
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：16 ms, 在所有 C++ 提交中击败了96.93%的用户
+
+内存消耗：12.6 MB, 在所有 C++ 提交中击败了74.41%的用户
+
+通过测试用例：129 / 129
+
+​                                                
+
+### [剑指 Offer 11. 旋转数组的最小数字](https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/)
+
+#### 【解题思路】
+
+这题虽然我一开始想到了二分，但又想了想，如果序列中绝大部分数字是重复的，就二分不了了，于是选择写线性去了。结果官方题解是二分和线性的结合体：能二分的时候二分，不能二分的时候就一个个移动。
+
+---
+
+学到了：官方题解的二分， mid=low+((high-low)>>1)而不是mid=(low+high)>>1，这是用减法来防止加法溢出。
+
+---
 
 
 
+#### 【完整代码】
+
+线性O(n)：
+
+``` c++
+class Solution {
+public:
+    int minArray(vector<int>& numbers) {
+        if (numbers.size()==1) return numbers[0];
+        if (numbers.size()==2) return min(numbers[0],numbers[1]);
+        
+        for (int i=0;i<numbers.size()-1;i++)
+            if (numbers[i]>numbers[i+1])
+                return numbers[i+1];
+        return numbers[0];
+    }
+};
+```
+
+二分，平均时间复杂度$O_{avg}(log_{2}x)$：
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int minArray(vector<int>& numbers) {
+        int n = numbers.size()-1;
+        
+        int left = 0, right = n; // denotes the possible area of min
+        while (left<right)
+        {
+            int mid = left + ((right-left)>>1);
+            if (numbers[mid]>numbers[right]) left = mid+1; else
+            if (numbers[mid]<numbers[left]) right = mid; else
+                                            right--;                        
+        }
+        return numbers[left];
+    }
+};
+
+int main()
+{
+    Solution solution = Solution();
+    vector<int> numbers = {2,0,1,1,1};        
+    
+    cout<<solution.minArray(numbers)<<endl;
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+0
+```
+
+#### 【**执行用时、内存消耗排名**】              
+
+执行用时：4 ms, 在所有 C++ 提交中击败了85.51%的用户
+
+内存消耗：11.7 MB, 在所有 C++ 提交中击败了97.55%的用户
+
+​             
+
+### [剑指 Offer 50. 第一个只出现一次的字符](https://leetcode-cn.com/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/)
+
+#### 【解题思路】
+
+俩数组，一个存某个字母访问了几次，一个存第一次访问该字母是在哪个位置。
+
+visit数组用了点技巧，用vis[char-'a']表示访问一次以上，vis[char-'a'+26]表示访问两次以上。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    char firstUniqChar(string s) {
+        bool vis[26+26];
+        int first[26];
+        memset(vis,false,sizeof(vis));
+        memset(first,0,sizeof(first));
+
+        for (int index=0; index<s.length(); index++)
+            if (vis[s[index]-'a'+26]) continue; else
+                if (vis[s[index]-'a']) vis[s[index]-'a'+26]=true; else
+                                     vis[s[index]-'a']=true, first[s[index]-'a']=index;
+        
+        int ans=s.length(); //s[ans] denotes the firstUnicChar
+        for (int index=0; index<26; index++)
+            if (vis[index] && !vis[index+26] && first[index]<ans) ans=first[index];
+        return (ans<s.length())? s[ans] : ' ';
+    }
+};
+
+int main()
+{
+    string s = "abaccdeff";
+    Solution* solution = new Solution();
+    cout<< solution->firstUniqChar(s)<<endl; 
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+b
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：12 ms, 在所有 C++ 提交中击败了97.52%的用户
+
+内存消耗：10.3 MB, 在所有 C++ 提交中击败了90.70%的用户
+
+通过测试用例：104 / 104
 
 
 
