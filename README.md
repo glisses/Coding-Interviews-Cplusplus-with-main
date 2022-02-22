@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败96.49%的用户，内存消耗平均击败71.13%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.19%的用户，内存消耗平均击败76.60%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -976,7 +976,270 @@ b
 
 通过测试用例：104 / 104
 
+​                 
 
+## Day 6
+
+​                          
+
+### [面试题32 - I. 从上到下打印二叉树](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/)
+
+#### 【解题思路】
+
+bfs
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+//Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+ 
+class Solution {
+public:
+    vector<int> ret;
+    queue<TreeNode*> tree;
+    vector<int> levelOrder(TreeNode* root) {
+        ret.clear();
+        while (!tree.empty()) tree.pop();
+        if (!root) return ret;
+
+        ret.push_back(root->val);
+        tree.push(root);
+        while (!tree.empty())
+        {
+            TreeNode* curr = tree.front();
+            tree.pop();
+            if (curr->left) ret.push_back(curr->left->val), tree.push(curr->left);
+            if (curr->right) ret.push_back(curr->right->val), tree.push(curr->right);
+        }
+
+        return ret;
+    }
+};
+
+int main()
+{
+    TreeNode* root = new TreeNode(3);
+    TreeNode* node1 = new TreeNode(9);
+    TreeNode* node2 = new TreeNode(20);
+    TreeNode* node3 = new TreeNode(15);
+    TreeNode* node4 = new TreeNode(7);
+    
+    root->left = node1; root->right = node2;
+    node2->left = node3; node2->right = node4;
+    
+    Solution solution = Solution();
+    for (auto x:solution.levelOrder(root))
+        cout<<x<<" ";
+    cout<<endl;
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+3 9 20 15 7
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：11.6 MB, 在所有 C++ 提交中击败了98.00%的用户
+
+通过测试用例：34 / 34
+
+​                          
+
+### [剑指 Offer 32 - II. 从上到下打印二叉树 II](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/)
+
+#### 【解题思路】
+
+很巧妙！用每一轮队列的size来控制，将相同深度的节点放在return vector的同一层。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+//Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+ 
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ret;
+        queue<TreeNode*> tree;
+        if (!root) return ret;
+
+        tree.push(root);
+        while (!tree.empty())
+        {
+            int num = tree.size();
+            ret.push_back({});
+
+            while (num--)
+            {
+                TreeNode* currNode = tree.front();
+                ret.back().push_back(currNode->val);
+                tree.pop();
+
+                if (currNode->left) tree.push(currNode->left);
+                if (currNode->right) tree.push(currNode->right);                
+            }
+
+        }
+
+        return ret;
+    }
+};
+int main()
+{
+    TreeNode* root = new TreeNode(3);
+    TreeNode* node1 = new TreeNode(9);
+    TreeNode* node2 = new TreeNode(20);
+    TreeNode* node3 = new TreeNode(15);
+    TreeNode* node4 = new TreeNode(7);
+    
+    root->left = node1; root->right = node2;
+    node2->left = node3; node2->right = node4;
+    
+    Solution solution = Solution();
+    for (auto x:solution.levelOrder(root))
+    {
+        for (auto y:x)
+            cout<<y<<" ";    
+        cout<<endl;    
+    }
+
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+3
+9 20
+15 7
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：12 MB, 在所有 C++ 提交中击败了97.90%的用户
+
+通过测试用例：34 / 34
+
+​                              
+
+### [剑指 Offer 32 - III. 从上到下打印二叉树 III](https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/)
+
+#### 【解题思路】
+
+没啥好说的。在上一题的基础上加个reverse。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+//Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+ 
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ret;
+        queue<TreeNode*> tree;
+        if (!root) return ret;
+
+        tree.push(root);
+        bool odd = true;
+        while (!tree.empty())
+        {
+            int num = tree.size();
+            ret.push_back({});
+                                                 
+            while (num--)
+            {
+                TreeNode* currNode = tree.front();
+                ret.back().push_back(currNode->val);
+                tree.pop();
+
+                if (currNode->left) tree.push(currNode->left);
+                if (currNode->right) tree.push(currNode->right);                
+            }
+            
+            if (!odd) reverse(ret.back().begin(), ret.back().end());
+            odd^=1;
+        }
+
+        return ret;
+    }
+};
+int main()
+{
+    TreeNode* root = new TreeNode(3);
+    TreeNode* node1 = new TreeNode(9);
+    TreeNode* node2 = new TreeNode(20);
+    TreeNode* node3 = new TreeNode(15);
+    TreeNode* node4 = new TreeNode(7);
+    
+    root->left = node1; root->right = node2;
+    node2->left = node3; node2->right = node4;
+    
+    Solution solution = Solution();
+    for (auto x:solution.levelOrder(root))
+    {
+        for (auto y:x)
+            cout<<y<<" ";    
+        cout<<endl;    
+    }
+
+    return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+3
+20 9
+15 7
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：11.9 MB, 在所有 C++ 提交中击败了99.57%的用户
+
+通过测试用例：34 / 34               
+
+​                                
 
 ​                          
 
