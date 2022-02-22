@@ -1,3 +1,5 @@
+# *Coding Interviews* C++ with main
+
 <div align="center"><p>
     <a href="https://github.com/glisses/Coding-Interviews-Cplusplus-with-main/pulse">
       <img src="https://img.shields.io/github/last-commit/glisses/Coding-Interviews-Cplusplus-with-main?color=%4dc71f&label=Last%20Commit&logo=github&style=flat-square"/>
@@ -7,9 +9,6 @@
     </a>
 </p>
 </div>
-​                          
-
-# *Coding Interviews* C++ with main
 
 本文严格按照[LeetCode上《剑指offer》学习计划](https://leetcode-cn.com/study-plan/lcof/?progress=wp5ibz5)的顺序撰写。代码皆为C++。
 
