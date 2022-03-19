@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.19%的用户，内存消耗平均击败76.60%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.37%的用户，内存消耗平均击败77.23%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -1242,4 +1242,78 @@ int main()
 ​                                
 
 ​                          
+
+## 其他
+
+### [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+
+#### 【解题思路】
+
+用counter记录，遇到左括号就+1，遇到右括号就-1。         
+
+用数组index[x]存放counter值为x时的合法字符串的左端点下标。           
+
+如果遇到一个右括号，那么index[counter+2]就会变得不合法。不合法记为1e9。        
+
+由于这个过程中，counter可能因为右括号很多而变为负数，所以用counter_convert存放取模后的值。
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int index[30001];
+
+    int longestValidParentheses(string s) {
+        int counter = 0;
+        int ans = 0;                    // length of the longest valid parentheses
+        int n = s.length();
+
+        for (int i=0; i<n+1; i++) index[i]=1e9;
+        
+        for (int i=0; i<s.length(); i++){
+            char c = s[i];
+            assert (c=='(' or c==')');  // only () in the string
+            counter = (c=='(')? counter+1 : counter-1;
+            int counter_convert = (counter+n)%n;    // to avoid negative index
+
+            if (c==')'){
+                ans = max(ans, i-index[(counter_convert+1)%n]+1);
+                index[(counter_convert+2)%n] = 1e9;   // becomes invalid
+            } else
+                index[counter_convert] = min(index[counter_convert], i);
+        
+        }
+        return ans;
+    }
+};
+
+int main()
+{
+	string s = ")()())";
+	
+	Solution solution = Solution();
+	cout<<solution.longestValidParentheses(s)<<endl;
+	return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+4
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+时间和空间复杂度都是O(n)
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：6.7 MB, 在所有 C++ 提交中击败了86.75%的用户
+
+
 
