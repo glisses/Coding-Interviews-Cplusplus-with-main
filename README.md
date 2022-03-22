@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.33%的用户，内存消耗平均击败75.23%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.17%的用户，内存消耗平均击败76.61%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -1391,6 +1391,141 @@ public:
 通过测试用例：195 / 195
 
 ​                                     
+
+​               
+
+## Day 8
+
+### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+#### 【解题思路1】
+
+思想是用a,b两个变量，分别存储fib[n]和fib[n+1]。
+
+从知乎上看到的，很妙的解法。时间复杂度O(N)，空间复杂度O(1)。
+
+#### 【完整代码1】
+
+``` c++
+class Solution {
+public:
+    int fib2(int a, int b, int n){
+        if (n<1) return a;
+        return fib2(b, (a+b)%1000000007, n-1);
+    }
+    int fib(int n) {
+        return fib2(0, 1, n);
+    }
+};
+```
+
+#### 【解题思路2】
+
+把斐波那契数列的公式写成矩阵乘法的形式，然后就可以用矩阵快速幂加速，O(log N)的时间复杂度。
+
+#### 【完整代码2】
+
+``` c++
+class Solution {
+public:
+    void matrixMultiply(int A[][2], int B[][2]){
+        int C[2][2];
+        for (int i=0;i<2;i++)
+        for (int j=0;j<2;j++)
+            C[i][j] = (1ll*A[i][0]*B[0][j] + 1ll*A[i][1]*B[1][j])%1000000007;
+        
+        for (int i=0;i<4;i++) A[i/2][i%2]=C[i/2][i%2];
+    }
+    int fib(int n) {
+        int A[2][2], B[2][2];
+        for (int i=0;i<4;i++) A[i/2][i%2]=0, B[i/2][i%2]=1; B[0][0]=0;
+        A[0][0]=1; A[1][1]=1;
+
+        while (n)
+        {
+            if (n&1) matrixMultiply(A, B);
+            n/=2;
+            matrixMultiply(B, B);
+        }
+        return A[1][0];
+    }
+};
+```
+
+> https://www.cnblogs.com/alexandergan/p/12225814.html中介绍了C++二维数组传参的方法
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：5.7 MB, 在所有 C++ 提交中击败了97.66%的用户
+
+通过测试用例：51 / 51
+
+​                         
+
+### [剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode-cn.com/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
+
+#### 【解题思路】
+
+与上一题基本相同。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    int fib(int a, int b, int n){
+        if (n<1) return a;
+        return fib(b, (a+b)%1000000007, n-1);
+    }
+    int numWays(int n) {
+        return fib(1, 1, n);
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：5.8 MB, 在所有 C++ 提交中击败了72.21%的用户
+
+通过测试用例：51 / 51
+
+​                 
+
+### [剑指 Offer 63. 股票的最大利润](https://leetcode-cn.com/problems/gu-piao-de-zui-da-li-run-lcof/)
+
+#### 【解题思路】
+
+如果必在第i天出售，则在前i-1天中股票最低价时购入是最划算的。贪心。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int min_price = 1e9, ans = 0;
+        for (auto price:prices){
+            ans = max(ans, price-min_price);
+            min_price = min(min_price, price);
+        }
+        return ans;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了88.50%的用户
+
+内存消耗：12.4 MB, 在所有 C++ 提交中击败了86.17%的用户
+
+通过测试用例：200 / 200
+
+​                 
 
 ​                          
 
