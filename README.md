@@ -1,4 +1,4 @@
-# *Coding Interviews* C++ with main
+# *Coding Interviews* C++
 
 <div align="center"><p>
     <a href="https://github.com/glisses/Coding-Interviews-Cplusplus-with-main/pulse">
@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.37%的用户，内存消耗平均击败77.23%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.33%的用户，内存消耗平均击败75.23%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -1239,7 +1239,158 @@ int main()
 
 通过测试用例：34 / 34               
 
-​                                
+​                           
+
+​                  
+
+​                
+
+## Day 7
+
+### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+#### 【解题思路】
+
+递归
+
+#### 【完整代码】
+
+``` c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameStructure(TreeNode* A, TreeNode* B)
+    {
+        if (A == nullptr) return false;
+        if (A->val != B->val) return false;
+        if (B->left && !isSameStructure(A->left, B->left)) return false;
+        if (B->right && !isSameStructure(A->right, B->right)) return false;
+        return true;
+    }
+
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        if (!B) return false;
+        if (isSameStructure(A, B)) return true;
+        if (A->left && isSubStructure(A->left, B)) return true;
+        if (A->right && isSubStructure(A->right, B)) return true;
+        return false;
+    }
+};
+```
+
+#### 【样例输出】
+
+本题比较简单，就没写主程序。
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：32 ms, 在所有 C++ 提交中击败了91.36%的用户
+
+内存消耗：32.9 MB, 在所有 C++ 提交中击败了41.02%的用户
+
+通过测试用例：48 / 48
+
+​                   
+
+### [剑指 Offer 27. 二叉树的镜像](https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/)
+
+#### 【解题思路】
+
+递归
+
+#### 【完整代码】
+
+``` c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* mirrorTree(TreeNode* root) {
+        if (root == nullptr) return nullptr;
+        TreeNode* left = mirrorTree(root->right);
+        TreeNode* right = mirrorTree(root->left);
+        root->left = left;
+        root->right = right;
+        return root;
+    }
+};	
+```
+
+#### 【样例输出】
+
+本题比较简单，就没写主程序。
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：8.9 MB, 在所有 C++ 提交中击败了64.52%的用户
+
+通过测试用例：68 / 68
+
+​                   
+
+### [剑指 Offer 28. 对称的二叉树](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
+
+#### 【解题思路】
+
+递归
+
+#### 【完整代码】
+
+``` c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isPair(TreeNode* L, TreeNode* R){
+        if (!L && !R) return true;
+        if (!L || !R) return false;
+        if (L->val != R->val) return false;
+        return isPair(L->left, R->right) and isPair(L->right, R->left);
+    }
+    bool isSymmetric(TreeNode* root) {
+        if (!root) return true;
+        return isPair(root->left, root->right);
+    }
+};
+```
+
+#### 【样例输出】
+
+本题比较简单，就没写主程序。
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：15.8 MB, 在所有 C++ 提交中击败了88.05%的用户
+
+通过测试用例：195 / 195
+
+​                                     
 
 ​                          
 
