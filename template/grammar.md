@@ -23,6 +23,19 @@ cout<<a[0]<<endl;
 reverse(a.begin(), a.end());
 ```
 
+``` c++
+//使用vector一次性完成二维数组的定义（注意：此种方法适用于每一行的列数相等的二维数组）
+vector<vector<int>> matrix(m, vector<int>(n, -1));
+
+//以下是拆分理解
+//创建一维数组matirx，这个数组里有m个元素，元素是int型vector。
+vector<vector<int>> matrix(m);
+//除了定义数组类型及数组大小外，同时给数组中的元素赋值：将元素赋值为大小为n的int型vector。
+vector<vector<int>> matrix(m, vector<int>(n));
+//除了定义数组类型、数组大小、列的大小，同时给数组列中的元素（或者说，数组中的所有元素）赋值为-1。
+vector<vector<int>> matrix(m, vector<int>(n, -1));
+```
+
 
 
 ## STL

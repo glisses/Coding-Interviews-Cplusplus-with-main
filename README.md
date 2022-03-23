@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.17%的用户，内存消耗平均击败76.61%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.18%的用户，内存消耗平均击败78.41%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -1525,7 +1525,195 @@ public:
 
 通过测试用例：200 / 200
 
-​                 
+​            
+
+​               
+
+## Day 9
+
+### [剑指 Offer 42. 连续子数组的最大和](https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/)
+
+#### 【解题思路】
+
+贪心。负滴不要。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int ans=nums[0], sum=nums[0];
+        for (int i=1; i<nums.size(); i++) {
+            sum = max(sum+nums[i], nums[i]);
+            ans = max(ans, sum);
+        }
+        return ans;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：12 ms, 在所有 C++ 提交中击败了95.54%的用户
+
+内存消耗：22.3 MB, 在所有 C++ 提交中击败了82.43%的用户
+
+通过测试用例：202 / 202
+
+​                        
+
+### [剑指 Offer 47. 礼物的最大价值](https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/)
+
+#### 【解题思路】
+
+经典的dp问题。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        for (int i=1; i<m; i++) grid[i][0] += grid[i-1][0];
+        for (int j=1; j<n; j++) grid[0][j] += grid[0][j-1];
+
+        for (int i=1; i<m; i++)
+        for (int j=1; j<n; j++)
+            grid[i][j] += max(grid[i-1][j], grid[i][j-1]);
+        return grid[m-1][n-1];
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了95.48%的用户
+
+内存消耗：8.8 MB, 在所有 C++ 提交中击败了93.37%的用户
+
+通过测试用例：61 / 61
+
+​                        
+
+​                           
+
+## Day 10
+
+### [剑指 Offer 46. 把数字翻译成字符串](https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/)
+
+#### 【解题思路】
+
+简单动态规划。
+
+备注：题解用了to_string()，省去了我把num拆成每一位放进a数组的过程。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    int translateNum(int num) {
+        if (num<10) return 1;
+        int cnt=0;
+        vector<int> a(10);
+        while (num) a[cnt++]=num%10, num/=10;
+        for (int i=0;i<(cnt+1)/2;i++) swap(a[i],a[cnt-i-1]);
+
+        int p = 1;
+        int q = (a[0]!=0 && a[0]*10+a[1]<26)? 2:1;
+        for (int i=2;i<cnt;i++) {
+            int x = p;
+            p = q;
+            if (a[i-1]!=0 && a[i-1]*10+a[i]<26) q += x;            
+        }
+
+        return q;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：5.7 MB, 在所有 C++ 提交中击败了97.49%的用户
+
+通过测试用例：49 / 49
+
+​                  
+
+### [剑指 Offer 48. 最长不含重复字符的子字符串](https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
+
+#### 【解题思路】
+
+我写了一个很丑的orz
+
+因为这题有坑，字符串不只包含a~z，还可能有空格啥的。我为了处理未知的字符，用了map。
+
+然后去题解那里一看，原来C++的数组下标也可以是字符，会转成对应的ASCII码。
+
+#### 【我的代码】
+
+``` c++
+class Solution {
+public:
+        int lengthOfLongestSubstring(string s) {
+            map<char, int> indexOfChar;
+
+            int ans = 0, left = 0, right = 0;
+            while (right < s.length()) {
+                char c = s[right];
+                if (indexOfChar.find(c) == indexOfChar.end()) {
+                    indexOfChar[c] = right;
+                    right++;
+                    continue;
+                }
+                ans = max(ans, right-left);
+                for (int j = left; j<indexOfChar[c]; j++)
+                    indexOfChar.erase( indexOfChar.find(s[j]) );
+                left = indexOfChar[c]+1;
+                indexOfChar[c] = right++;
+            }
+            return max(int(s.length())-left, ans);
+    }
+};
+
+
+```
+
+#### 【题解代码】
+
+``` c++
+class Solution {
+public:
+        int lengthOfLongestSubstring(string s) {
+            vector<int> dp(128,-1);//存储每个字符最后出现的位置
+            int i=0,j=0,res=0;
+            for(;j<s.size();j++){    
+                if(dp[s[j]]<i)//前面的子串不含新加的字符
+                    res=max(res,j-i+1);
+                else//当前字符在之前的子串中出现过            
+                    i=dp[s[j]]+1;//更新i，使得i到j没有重复字符
+                dp[s[j]]=j;//更改当前字符出现的位置                               
+            }
+        return res;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：4 ms, 在所有 C++ 提交中击败了97.83%的用户
+
+内存消耗：7.6 MB, 在所有 C++ 提交中击败了80.13%的用户
+
+通过测试用例：987 / 987
+
+​                  
+
+​                              
 
 ​                          
 
