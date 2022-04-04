@@ -26,7 +26,7 @@
 
 ​                 
 
-截至目前，本文中代码在所有CPP提交中，**执行用时平均击败97.18%的用户，内存消耗平均击败78.41%的用户**。
+截至目前，本文中代码在所有CPP提交中，**执行用时平均击败96.82%的用户，内存消耗平均击败81.61%的用户**。
 
 你也可以在[我的博客](https://blog.fishercat.top/2022/02/18/Coding-Interviews-C++-with-main/)中浏览以下内容，会有更好的阅读体验。
 
@@ -1712,6 +1712,203 @@ public:
 通过测试用例：987 / 987
 
 ​                  
+
+​                    
+
+## Day 11
+
+### [剑指 Offer 18. 删除链表的节点](https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
+
+#### 【解题思路】
+
+让前一个节点指向后一个节点，即跳过这个节点。
+
+注意本题说明：若使用 C 或 C++ 语言，你不需要 `free` 或 `delete` 被删除的节点
+
+#### 【完整代码】
+
+``` c++
+#include <bits/stdc++.h>
+using namespace std;
+ 
+//Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+    ListNode* vectorToListNode(vector<int> &a);
+};
+
+ListNode* ListNode::vectorToListNode(vector<int> &a) {
+	ListNode* dummyRoot = new ListNode(0);
+	ListNode* ptr = dummyRoot;
+	for (auto x:a) {
+		ptr->next = new ListNode(x);
+		ptr = ptr->next;
+	}
+	ptr = dummyRoot->next;
+	delete dummyRoot;	//don't need to deal with empty vector particularly
+	return ptr;
+}
+
+class Solution {
+public:
+    ListNode* deleteNode(ListNode* head, int val) {
+    	if (head->val == val) return head->next;
+    	
+		for (auto ptr=head; ptr; ptr=ptr->next) 
+			if (ptr->next->val == val) {
+				ptr->next = ptr->next->next;
+				break;
+			}
+		return head;
+    }
+};
+
+int main()
+{
+	vector<int> a = {4,5,1,9};
+	int val = 5;
+	
+	ListNode* head;
+	head = head->vectorToListNode(a);
+	for (auto ptr=head; ptr; ptr = ptr->next)
+		cout<< ptr->val;
+	cout<<endl;
+	
+	Solution* solution = new Solution();
+	for (auto ptr=solution->deleteNode(head, val); ptr; ptr = ptr->next)
+		cout<< ptr->val;
+	cout<<endl;
+	return 0;
+}
+```
+
+#### 【样例输出】
+
+``` c++
+4519
+419
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：8 ms, 在所有 C++ 提交中击败了86.65%的用户
+
+内存消耗：8.9 MB, 在所有 C++ 提交中击败了99.28%的用户
+
+通过测试用例：37 / 37
+
+​                     
+
+### [剑指 Offer 22. 链表中倒数第k个节点](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+#### 【解题思路】
+
+双指针，ptr遍历到末尾，Kth则表示从ptr倒数第K个节点。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    ListNode* getKthFromEnd(ListNode* head, int k) {
+        ListNode* ptr = head;
+        ListNode* Kth = head;
+        for (int i=0;i<k-1;i++) ptr = ptr->next;
+
+        for (; ptr->next!=nullptr; ptr = ptr->next)
+            Kth = Kth->next;
+        return Kth;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：0 ms, 在所有 C++ 提交中击败了100.00%的用户
+
+内存消耗：10.2 MB, 在所有 C++ 提交中击败了91.92%的用户
+
+通过测试用例：208 / 208
+
+​                    
+
+## Day 12
+
+### [剑指 Offer 25. 合并两个排序的链表](https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
+
+#### 【解题思路】
+
+经典题，俩指针遍历俩链表，哪个值小哪个继续挪
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode* dummyRoot = new ListNode(0);
+        ListNode* ptr = dummyRoot;
+
+        while (l1!=nullptr && l2!=nullptr) {
+            if (l1->val < l2->val) ptr->next = l1, l1 = l1->next;
+                else                   ptr->next = l2, l2 = l2->next;
+            ptr = ptr->next;
+        }
+        ptr->next = (l1 != nullptr)? l1 : l2;
+
+        ptr = dummyRoot->next;
+        delete dummyRoot;
+        return ptr;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：16 ms, 在所有 C++ 提交中击败了93.80%的用户
+
+内存消耗：18.6 MB, 在所有 C++ 提交中击败了93.20%的用户
+
+通过测试用例：218 / 218
+
+​                     
+
+### [剑指 Offer 52. 两个链表的第一个公共节点](https://leetcode-cn.com/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/)
+
+#### 【解题思路】
+
+优雅。看了题解做的。
+
+把两个链表拼接起来，这样总会走到公共节点。
+
+#### 【完整代码】
+
+``` c++
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* ptrA = headA;
+        ListNode* ptrB = headB;
+        while (headA!=headB) {
+            headA = (headA)? headA->next : ptrB;
+            headB = (headB)? headB->next : ptrA;
+        }
+        return headA;
+    }
+};
+```
+
+#### 【**执行用时、内存消耗排名**】
+
+执行用时：32 ms, 在所有 C++ 提交中击败了97.60%的用户
+
+内存消耗：14 MB, 在所有 C++ 提交中击败了97.99%的用户
+
+通过测试用例：45 / 45
+
+​                     
 
 ​                              
 

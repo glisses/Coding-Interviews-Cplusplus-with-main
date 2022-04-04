@@ -289,3 +289,114 @@ int main()
 ```
 
 *Tips：对于2维数组ia来说，`ia[1]`指向第二行的第一个位置，`\*ia[1]`等于2，一级指针指向每行（子数组）的第一个元素，用二级指针才能定位到任意单个元素。在实际使用中尽量避免使用强制转换和多级指针。*
+
+
+
+## 最短路板子
+
+``` C++
+#define Max 0x3f3f3f3f
+#define maxn 10010
+int n,m;
+int Map[maxn][maxn];
+int dist[maxn];
+int vist[maxn];
+```
+
+## Floyd
+
+``` C++
+void floyd()
+{
+    int i,j,k;
+    for (k=1; k<=n; k++)
+    {
+        for(i=1; i<=n; i++)
+        {
+            for (j=1; j<=n; j++)
+            {
+                Map[i][j]=min( Map[i][j],Map[i][k]+Map[k][j] );
+            }
+        }
+    }
+}
+
+```
+
+## Dijkstra
+
+``` C++
+void Dijkstra(int s)
+{
+    int i,j;
+    int u;
+    int Min;
+    for (i=1; i<=n; i++)
+    {
+        vist[i]=0;
+        dist[i] = Map[s][i];
+    }
+    vist[s] = 1;
+    for (i=1; i<=n; i++)
+    {
+        Min=Max;
+        u = -1;
+        for (j=1; j<=n; j++)
+        {
+            if (vist[j]==0&&dist[j]<Min)
+            {
+                u = j;
+                Min = dist[j];
+            }
+        }
+        if (u==-1)
+            break;
+        vist[u] = 1;
+        for (j=1; j<=n; j++)
+        {
+            if(vist[j]==0)
+            {
+                if(dist[u]+Map[u][j]<dist[j])
+                    dist[j] = dist[u]+Map[u][j];
+            }
+        }
+    }
+}
+```
+
+## SPFA
+
+``` C++
+void spfa(int s)
+{
+    int i,now;
+    for( i=1;i<=n;i++ )
+    {
+        dist[i]=Max;
+        vist[i] = 0;
+    }
+    dist[s] = 0;
+    queue<int>q;
+    q.push(s);
+    vist[s] = 1;
+    while (!q.empty())
+    {
+        now = q.front();
+        q.pop();
+        vist[now] = 0;
+        for( i=1;i<=n;i++)
+        {
+            if (dist[i]>dist[now]+Map[now][i])
+            {
+                dist[i] = dist[now]+Map[now][i];
+                if (vist[i] == 0)
+                {
+                    q.push(i);
+                    vist[i] = 1;
+                }
+            }
+        }
+    }
+}
+```
+
